@@ -1,6 +1,15 @@
 import { getProviders, signIn, useSession } from "next-auth/react"; //getProviders est une fonction de la bibliothèque NextAuth.js qui permet de récupérer la liste des fournisseurs d'authentification configurés dans ton application. Ces fournisseurs peuvent inclure des services comme Google, GitHub, Facebook, ou même des fournisseurs personnalisés.
+import { useRouter } from "next/router";
 export default function LoginPage({ providers }) {
   const {data,status} = useSession();
+  const router = useRouter();
+  if(status ===' loading'){
+
+    return '';
+  };
+  if(data){
+    router.push('/')
+  }
   return (
     <>
       <div className="flex items-center justify-center h-screen">
