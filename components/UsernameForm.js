@@ -38,6 +38,7 @@ router.reload();
           placeholder={"username"}
           value={username}
           className="block mb-1 bg-twitterBorder px-3 py-1 rounded-full "
+          onChange={(e) => {setUsername(e.target.value)}}
         />
         <button className="block bg-twitterBlue w-full rounded-full py-1">Continue</button>
       </form>
