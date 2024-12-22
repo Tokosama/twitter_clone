@@ -8,10 +8,14 @@ export default function PostContent({
   author,
   createdAt,
   _id,
+  likesCount,
+  likedByMe,
   big = false,
 }) {
+
   return (
     <>
+    
       <div className="flex w-full ">
         <div>{!!author?.image && <Avatar src={author.image} />}</div>
         <div className="pl-2 grow ">
@@ -32,7 +36,7 @@ export default function PostContent({
           {!big && (
             <div>
               <Link href={`/${author.username}/status/${_id}`}>{text}</Link>
-              <PostButtons />
+              <PostButtons id={_id} likesCount={likesCount} likedByMe={likedByMe} />
             </div>
           )}
         </div>
@@ -51,7 +55,7 @@ export default function PostContent({
                 .join(" ")}
             </div>
           )}
-          <PostButtons />
+          <PostButtons id={_id} likesCount={likesCount} likedByMe={likedByMe} />
         </div>
       )}
     </>

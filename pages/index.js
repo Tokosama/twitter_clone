@@ -4,21 +4,24 @@ import PostForm from "@/components/PostForm";
 import UsernameForm from "@/components/UsernameForm";
 import useUserInfo from "@/hooks/useUserInfo";
 import axios from "axios";
-import { useSession } from "next-auth/react";
 
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const { userInfo, status: userInfoStatus } = useUserInfo();
   const [posts, setPosts] = useState([]);
+  const [idsLikedByMe,setIdsLikedByMe] = useState([]);
 
-  async function fetcHomePosts() {
-    await axios.get("/api/posts").then((response) => {
-      setPosts(response.data);
+
+  function fetcHomePosts() {
+     axios.get("/api/posts").then((response) => {
+      setPosts(response.data.posts);
+      setIdsLikedByMe(response.data.idsLikedByMe);
     });
   }
-  useEffect(async () => {
+  useEffect(() => {
     fetcHomePosts();
+
   }, []);
 
   if (userInfoStatus === "loading") {
@@ -32,6 +35,7 @@ export default function Home() {
       </>
     );
   }
+
   return (
     <div>
       <Layout>
@@ -46,7 +50,7 @@ export default function Home() {
             posts.map((post) => (
               <>
                 <div className=" border-t border-twitterBorder p-5">
-                  <PostContent {...post} />
+                  <PostContent {...post} likedByMe={idsLikedByMe.includes(post._id)} />
                 </div>
               </>
             ))}

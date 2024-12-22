@@ -1,4 +1,27 @@
-export default function PostButtons() {
+import axios from "axios";
+import { useState } from "react";
+import FlipNumbers from "react-flip-numbers";// dependance qui permet de gerer laffichage des nombres et leurs transitions
+
+export default function PostButtons({
+  id,
+  likesCount: likesCountDefault = 0,
+  likedByMe:likedByMeDefault=false,
+}) {
+  const [likesCount, setLikesCount] = useState(likesCountDefault);
+  const [likedByMe,setLikedByMe] = useState(likedByMeDefault);
+  async function toggleLike() {
+    const response = await axios.post("/api/like", { id });
+    if (response?.data?.like) {
+
+      setLikesCount((prev) => prev + 1);
+      setLikedByMe(true);
+    } else {
+      setLikesCount((prev) => prev - 1);
+      setLikedByMe(false);
+    }
+
+  }
+
   return (
     <div className="flex justify-between mr-12 text-twitterLightGray text-sm mt-1 ">
       <button className="flex">
@@ -35,14 +58,17 @@ export default function PostButtons() {
         </svg>
         <span>0</span>
       </button>
-      <button className="flex">
+      <button
+        className={(likedByMe ? " text-red-500 fill-red-500 " : "") + "flex items-center "}
+        onClick={toggleLike}
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
           strokeWidth={1.5}
           stroke="currentColor"
-          className="size-5 mr-1"
+          className="size-5 mr-1 fill-inherit"
         >
           <path
             strokeLinecap="round"
@@ -51,7 +77,7 @@ export default function PostButtons() {
           />
         </svg>
 
-        <span>0</span>
+        <span><FlipNumbers height={12} width={12}   play perspective={100} numbers={likesCount.toString()} /></span>
       </button>
       <button className="flex">
         <svg
