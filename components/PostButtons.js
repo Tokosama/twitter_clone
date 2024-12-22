@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FlipNumbers from "react-flip-numbers";// dependance qui permet de gerer laffichage des nombres et leurs transitions
 
 export default function PostButtons({
@@ -9,6 +9,14 @@ export default function PostButtons({
 }) {
   const [likesCount, setLikesCount] = useState(likesCountDefault);
   const [likedByMe,setLikedByMe] = useState(likedByMeDefault);
+
+
+  useEffect(() => {
+    setLikesCount(likesCountDefault);
+    setLikedByMe(likedByMeDefault);
+  }, [id]);
+
+  
   async function toggleLike() {
     const response = await axios.post("/api/like", { id });
     if (response?.data?.like) {
