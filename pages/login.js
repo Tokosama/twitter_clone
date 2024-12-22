@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 export default function LoginPage({ providers }) {
   const {data,status} = useSession();
   const router = useRouter();
-  if(status ===' loading'){
+  if(status ==='loading'){
 
     return '';
   };

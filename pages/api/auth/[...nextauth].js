@@ -3,7 +3,8 @@ import NextAuth from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import client from "@/lib/db";
 
-export default NextAuth({
+
+export const authOptions = {
   adapter: MongoDBAdapter(client),
   providers: [
     GoogleProvider({
@@ -11,6 +12,7 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
   },
@@ -25,4 +27,5 @@ export default NextAuth({
       return session;
     },
   },
-});
+}
+export default NextAuth(authOptions);
