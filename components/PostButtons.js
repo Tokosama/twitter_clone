@@ -1,55 +1,56 @@
 import axios from "axios";
+import Link from "next/link";
 import { useEffect, useState } from "react";
-import FlipNumbers from "react-flip-numbers";// dependance qui permet de gerer laffichage des nombres et leurs transitions
+import FlipNumbers from "react-flip-numbers"; // dependance qui permet de gerer laffichage des nombres et leurs transitions
 
 export default function PostButtons({
+  username,
   id,
   likesCount: likesCountDefault = 0,
-  likedByMe:likedByMeDefault=false,
+  likedByMe: likedByMeDefault = false,
   commentsCount,
 }) {
   const [likesCount, setLikesCount] = useState(likesCountDefault);
-  const [likedByMe,setLikedByMe] = useState(likedByMeDefault);
-
+  const [likedByMe, setLikedByMe] = useState(likedByMeDefault);
 
   useEffect(() => {
     setLikesCount(likesCountDefault);
     setLikedByMe(likedByMeDefault);
   }, [id]);
 
-
   async function toggleLike() {
     const response = await axios.post("/api/like", { id });
     if (response?.data?.like) {
-
       setLikesCount((prev) => prev + 1);
       setLikedByMe(true);
     } else {
       setLikesCount((prev) => prev - 1);
       setLikedByMe(false);
     }
-
   }
 
   return (
     <div className="flex justify-between mr-12 text-twitterLightGray text-sm mt-1 ">
-      <button className="flex">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          strokeWidth={1.5}
-          stroke="currentColor"
-          className="size-5 mr-1"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"
-          />
-        </svg>
-        <span>{commentsCount}</span>
-      </button>
+      <Link href={`/${username}/status/${id}`}>
+        <div className="flex cursor-pointer">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="currentColor"
+            className="size-5 mr-1"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"
+            />
+          </svg>
+          <span>{commentsCount}</span>
+        </div>
+      </Link>
+
       <button className="flex">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -68,7 +69,10 @@ export default function PostButtons({
         <span>0</span>
       </button>
       <button
-        className={(likedByMe ? " text-red-500 fill-red-500 " : "") + "flex items-center "}
+        className={
+          (likedByMe ? " text-red-500 fill-red-500 " : "") +
+          "flex items-center "
+        }
         onClick={toggleLike}
       >
         <svg
@@ -86,7 +90,15 @@ export default function PostButtons({
           />
         </svg>
 
-        <span><FlipNumbers height={12} width={12}   play perspective={100} numbers={likesCount.toString()} /></span>
+        <span>
+          <FlipNumbers
+            height={12}
+            width={12}
+            play
+            perspective={100}
+            numbers={likesCount.toString()}
+          />
+        </span>
       </button>
       <button className="flex">
         <svg

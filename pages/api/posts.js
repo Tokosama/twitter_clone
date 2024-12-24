@@ -7,7 +7,7 @@ import Like from "@/models/Like";
 export default async function handler(req, res) {
   await initMongoose();
   const session = await getServerSession(req, res, authOptions);
-
+  console.log(session)
   if (req.method === "GET") {
     const { id } = req.query;
     if (id) {
@@ -16,7 +16,8 @@ export default async function handler(req, res) {
     } else {
 
       const parent = req.query.parent || null;
-
+      const author = req.query.author;
+      const searchFilter = author? {author} : {parent};
       const posts = await Post.find({parent})
         .populate("author")
         .sort({ createdAt: -1 })

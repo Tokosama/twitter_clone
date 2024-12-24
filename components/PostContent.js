@@ -4,6 +4,7 @@ import Link from "next/link";
 import PostButtons from "./PostButtons";
 
 export default function PostContent({
+  username,
   text,
   author,
   createdAt,
@@ -16,12 +17,26 @@ export default function PostContent({
   return (
     <>
       <div className="flex w-full ">
-        <div>{!!author?.image && <Avatar src={author.image} />}</div>
+        <div>
+          {!!author?.image && (
+            <Link href={"/" + author?.username}>
+              <div className="cursor-pointer">
+                <Avatar src={author.image} />
+              </div>
+            </Link>
+          )}
+        </div>
         <div className="pl-2 grow ">
           <div>
-            <span className="font-bold pr-1">{author.name} </span>
+            <Link href={"/" + author?.username}>
+              <span className="font-bold pr-1">{author.name} </span>
+            </Link>
             {big && <br />}
-            <span className="text-twitterLightGray">@{author.username} </span>
+
+            <Link href={"/" + author?.username}>
+              <span className="text-twitterLightGray">@{author.username} </span>
+            </Link>
+
             {createdAt && !big && (
               <span className="pl-1 text-twitterLightGray">
                 {" "}
@@ -38,6 +53,7 @@ export default function PostContent({
                 <div className="w-full cursor-pointer"> {text}</div>
               </Link>
               <PostButtons
+                username={author.username}
                 id={_id}
                 likesCount={likesCount}
                 likedByMe={likedByMe}
@@ -62,6 +78,7 @@ export default function PostContent({
             </div>
           )}
           <PostButtons
+            username={author.username}
             id={_id}
             likesCount={likesCount}
             likedByMe={likedByMe}
