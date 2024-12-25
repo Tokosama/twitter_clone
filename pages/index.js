@@ -10,12 +10,12 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const {data:session} = useSession();
+  const { data: session } = useSession();
 
   const { userInfo, setUserInfo, status: userInfoStatus } = useUserInfo();
   const [posts, setPosts] = useState([]);
   const [idsLikedByMe, setIdsLikedByMe] = useState([]);
-const router = useRouter();
+  const router = useRouter();
   function fetcHomePosts() {
     axios.get("/api/posts").then((response) => {
       setPosts(response.data.posts);
@@ -44,9 +44,9 @@ const router = useRouter();
     );
   }
 
-  if(!userInfo){
-    router.push('/login')
-    return 'no user info'
+  if (!userInfo) {
+    router.push("/login");
+    return "no user info";
   }
 
   return (
@@ -63,6 +63,16 @@ const router = useRouter();
             posts.map((post) => (
               <>
                 <div className=" border-t border-twitterBorder p-5">
+                  {post.parent && (
+                    <div>
+                      <PostContent {...post.parent} />
+                      <div className="relative h-8">
+                        <div className="border-l-2 border-twitterBorder h-14 absolute ml-6 -top-6">
+                          
+                        </div>
+                      </div>
+                    </div>
+                  )}
                   <PostContent
                     {...post}
                     likedByMe={idsLikedByMe.includes(post._id)}

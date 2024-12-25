@@ -29,12 +29,12 @@ export default function PostContent({
         <div className="pl-2 grow ">
           <div>
             <Link href={"/" + author?.username}>
-              <span className="font-bold pr-1">{author.name} </span>
+              <span className="font-bold pr-1">{author?.name} </span>
             </Link>
             {big && <br />}
 
             <Link href={"/" + author?.username}>
-              <span className="text-twitterLightGray">@{author.username} </span>
+              <span className="text-twitterLightGray">@{author?.username} </span>
             </Link>
 
             {createdAt && !big && (
@@ -49,11 +49,11 @@ export default function PostContent({
           </div>
           {!big && (
             <div>
-              <Link href={`/${author.username}/status/${_id}`}>
+              <Link href={`/${author?.username}/status/${_id}`}>
                 <div className="w-full cursor-pointer"> {text}</div>
               </Link>
               <PostButtons
-                username={author.username}
+                username={author?.username}
                 id={_id}
                 likesCount={likesCount}
                 likedByMe={likedByMe}
