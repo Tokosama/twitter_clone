@@ -16,10 +16,10 @@ export default function UserPage() {
 
   const { userInfo } = useUserInfo();
 
-  const isFollowing = false;
   const [posts, setPosts] = useState([]);
   const [postsLikedByMe, setPostsLikedByMe] = useState([]);
   const [editMode, setEditMode] = useState(false);
+  const [isFollowing,setIsFollowing] = useState(false);
   useEffect(() => {
     if (!username) {
       return;
@@ -27,6 +27,8 @@ export default function UserPage() {
     axios.get("/api/users?username=" + username).then((response) => {
       setProfileInfo(response.data.user);
       setOriginalUserInfo(response.data.user);
+    setIsFollowing(!!response.data.follow);
+
     });
   }, [username]);
 
@@ -60,6 +62,13 @@ export default function UserPage() {
     });
     setEditMode(false);
   }
+
+  function toggleFollow(){
+    setIsFollowing(prev => !prev);
+    axios.post('/api/followers',{
+      destination : profileInfo?._id,
+    })
+  }
   const isMyProfile = profileInfo?._id === userInfo?._id;
 
   return (
@@ -89,7 +98,7 @@ export default function UserPage() {
             <div className="p-2">
               {!isMyProfile && (
                 <button
-                  onClick={() => console.log(test)}
+                  onClick={toggleFollow}
                   className={
                     (isFollowing
                       ? "bg-twitterWhite text-black"
