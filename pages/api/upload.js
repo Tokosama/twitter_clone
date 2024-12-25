@@ -24,7 +24,9 @@ export default async function handle(req, res) {
     if (err) {
       throw err;
     }
-    const fileInfo = files["cover"][0];
+
+    const type =Object.keys(files)[0];
+    const fileInfo = files[type][0];
 
     const ext = fileInfo.path.split('.').pop();
     const filename = Date.now() + '.' + ext;
@@ -48,7 +50,7 @@ export default async function handle(req, res) {
     const user = await User.findByIdAndUpdate(
       session?.user.id,
       {
-        cover: link,
+        [type]: link,
       },
       { new: true }
     );
