@@ -12,8 +12,31 @@ export default function PostContent({
   likesCount,
   likedByMe,
   commentsCount,
+  images,
   big = false,
 }) {
+  function showImages() {
+    if(!images.length){
+      return '';
+    }
+    return (
+      <>
+        <div className="flex -mx-1 ">
+          {images?.length > 0 &&
+            images.map((img) => (
+              <>
+                <div key={img} className="m-2">
+                  <img
+                    src={img}
+                    alt=""
+                  />
+                </div>
+              </>
+            ))}
+        </div>
+      </>
+    );
+  }
   return (
     <>
       <div className="flex w-full ">
@@ -34,7 +57,9 @@ export default function PostContent({
             {big && <br />}
 
             <Link href={"/" + author?.username}>
-              <span className="text-twitterLightGray">@{author?.username} </span>
+              <span className="text-twitterLightGray">
+                @{author?.username}{" "}
+              </span>
             </Link>
 
             {createdAt && !big && (
@@ -50,7 +75,12 @@ export default function PostContent({
           {!big && (
             <div>
               <Link href={`/${author?.username}/status/${_id}`}>
-                <div className="w-full cursor-pointer"> {text}</div>
+                <div className="w-full cursor-pointer">
+                  <>
+                    {text}
+                    {showImages()}
+                  </>
+                </div>
               </Link>
               <PostButtons
                 username={author?.username}
@@ -65,7 +95,12 @@ export default function PostContent({
       </div>
       {big && (
         <div className="mt-2 ">
-          <Link href={`/${author.username}/status/${_id}`}>{text}</Link>
+          <Link href={`/${author.username}/status/${_id}`}>
+            <>
+              {text}
+              {showImages()}
+            </>
+          </Link>
           {createdAt && (
             <div className="text-twitterLightGray pl-1 ">
               {new Date(createdAt)

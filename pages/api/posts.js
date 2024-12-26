@@ -8,6 +8,7 @@ import Follower from "@/models/Follower";
 export default async function handler(req, res) {
   await initMongoose();
   const session = await getServerSession(req, res, authOptions);
+  //Get request
   if (req.method === "GET") {
     const { id } = req.query;
     if (id) {
@@ -50,13 +51,14 @@ export default async function handler(req, res) {
       });
     }
   }
-
+// Post request
   if (req.method === "POST") {
-    const { text, parent } = req.body;
+    const { text, parent,images } = req.body;
     const post = await Post.create({
       author: session.user.id,
       text,
       parent,
+      images,
     });
     if (parent) {
       const parentPost = await Post.findById(parent);

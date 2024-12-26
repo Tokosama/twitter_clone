@@ -18,18 +18,17 @@ export default async function handle(req, res) {
       secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
     },
   });
-  const form = new multiparty.Form(
-  );
+  const form = new multiparty.Form();
   form.parse(req, async (err, fields, files) => {
     if (err) {
       throw err;
     }
 
-    const type =Object.keys(files)[0];
+    const type = Object.keys(files)[0];
     const fileInfo = files[type][0];
 
-    const ext = fileInfo.path.split('.').pop();
-    const filename = Date.now() + '.' + ext;
+    const ext = fileInfo.path.split(".").pop();
+    const filename = Date.now() + "." + ext;
 
     const fileContent = fs.readFileSync(fileInfo.path);
     // Configuration de l'upload
@@ -46,15 +45,15 @@ export default async function handle(req, res) {
       })
     );
     const link = `https://twitter-clone-tokosama2.s3.amazonaws.com/${filename}`;
-
-    const user = await User.findByIdAndUpdate(
-      session?.user.id,
-      {
-        [type]: link,
-      },
-      { new: true }
-    );
-    console.log(link)
+    if (type === "cover" || type === "image") {
+     await User.findByIdAndUpdate(
+        session?.user.id,
+        {
+          [type]: link,
+        },
+        { new: true }
+      );
+    }
 
     res.json({ link, src: link });
   });

@@ -204,7 +204,7 @@ export default function UserPage() {
       )}
       {posts?.length > 0 &&
         posts.map((post) => (
-          <div className="p-5 border-t border-twitterBorder">
+          <div className="p-5 border-t border-twitterBorder" key={post}>
             <PostContent
               {...post}
               likedByMe={postsLikedByMe.includes(post._id)}

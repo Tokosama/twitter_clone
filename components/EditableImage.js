@@ -23,7 +23,7 @@ if(!editable) extraClasses ="";
       body: data,
     }).then(async (response) => {
       const json = await response.json();
-      console.log(json.link);
+
 
       onChange(json.link);
 

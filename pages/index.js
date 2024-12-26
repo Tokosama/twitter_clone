@@ -62,7 +62,7 @@ export default function Home() {
           {posts.length > 0 &&
             posts.map((post) => (
               <>
-                <div className=" border-t border-twitterBorder p-5">
+                <div key={post._id} className=" border-t border-twitterBorder p-5">
                   {post.parent && (
                     <div>
                       <PostContent {...post.parent} />
