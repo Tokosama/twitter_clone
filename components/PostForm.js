@@ -42,8 +42,8 @@ export default function PostForm({
               <div>
                 <textarea
                   className={
-                    (compact ? "h-10 mt-1 " : "h-24 ") +
-                    "w-full p-2 bg-transparent text-twitterWhite "
+                    (compact ? " mt-1 " : " ") +
+                    "w-full p-2 bg-transparent text-twitterWhite focus:outline-none"
                   }
                   placeholder={placeholder}
                   onChange={(e) => setText(e.target.value)}

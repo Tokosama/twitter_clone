@@ -21,11 +21,11 @@ export default function PostContent({
     }
     return (
       <>
-        <div className="flex -mx-1 ">
+        <div className=" flex -mx-1 border items-center my-4 border-[#272A2D] rounded-xl overflow-hidden gap-[1px] ">
           {images?.length > 0 &&
             images.map((img) => (
               <>
-                <div key={img} className="m-2">
+                <div key={img} className=" h-full">
                   <img
                     src={img}
                     alt=""
