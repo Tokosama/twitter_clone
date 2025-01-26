@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/pages/Layout";
 import PostContent from "@/components/PostContent";
 import PostForm from "@/components/PostForm";
 import UsernameForm from "@/components/UsernameForm";
@@ -52,45 +52,50 @@ export default function Home() {
   return (
     <div>
       <Layout>
-        <h1 className="text-xl font-bold p-4">Home</h1>
-        <PostForm
-          onPost={() => {
-            fetcHomePosts();
-          }}
-        />
-        <div className="">
-          {posts.length > 0 &&
-            posts.map((post) => (
-              <>
-                <div key={post._id} className=" border-t border-twitterBorder p-5">
-                  {post.parent && (
-                    <div>
-                      <PostContent {...post.parent} />
-                      <div className="relative h-8">
-                        <div className="border-l-2 border-twitterBorder h-14 absolute ml-6 -top-6">
-                          
+        <div className="h-full">
+          <h1 className="text-xl font-bold p-4">Home</h1>
+
+          <PostForm
+            onPost={() => {
+              fetcHomePosts();
+            }}
+          />
+
+          <div className="">
+            {posts.length > 0 &&
+              posts.map((post) => (
+                <>
+                  <div
+                    key={post._id}
+                    className=" border-t border-twitterBorder p-5"
+                  >
+                    {post.parent && (
+                      <div>
+                        <PostContent {...post.parent} />
+                        <div className="relative h-8">
+                          <div className="border-l-2 border-twitterBorder h-14 absolute ml-6 -top-6"></div>
                         </div>
                       </div>
-                    </div>
-                  )}
-                  <PostContent
-                    {...post}
-                    likedByMe={idsLikedByMe.includes(post._id)}
-                  />
-                </div>
-              </>
-            ))}
-        </div>
-        {userInfo && (
-          <div className="p-5 text-center border-t border-twitterBorder">
-            <button
-              className="bg-twitterWhite text-black px-5 py-2 rounded-full"
-              onClick={logout}
-            >
-              Logout
-            </button>
+                    )}
+                    <PostContent
+                      {...post}
+                      likedByMe={idsLikedByMe.includes(post._id)}
+                    />
+                  </div>
+                </>
+              ))}
           </div>
-        )}
+          {userInfo && (
+            <div className="p-5 text-center border-t border-twitterBorder">
+              <button
+                className="bg-twitterWhite text-black px-5 py-2 rounded-full"
+                onClick={logout}
+              >
+                Logout
+              </button>
+            </div>
+          )}
+        </div>
       </Layout>
     </div>
   );

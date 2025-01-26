@@ -1,6 +1,6 @@
 import Avatar from "@/components/Avatar";
 import Cover from "@/components/Cover";
-import Layout from "@/components/Layout";
+import Layout from "@/pages/Layout";
 import PostContent from "@/components/PostContent";
 import TopNavLink from "@/components/TopNavLink";
 import useUserInfo from "@/hooks/useUserInfo";
@@ -19,7 +19,7 @@ export default function UserPage() {
   const [posts, setPosts] = useState([]);
   const [postsLikedByMe, setPostsLikedByMe] = useState([]);
   const [editMode, setEditMode] = useState(false);
-  const [isFollowing,setIsFollowing] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
   useEffect(() => {
     if (!username) {
       return;
@@ -27,8 +27,7 @@ export default function UserPage() {
     axios.get("/api/users?username=" + username).then((response) => {
       setProfileInfo(response.data.user);
       setOriginalUserInfo(response.data.user);
-    setIsFollowing(!!response.data.follow);
-
+      setIsFollowing(!!response.data.follow);
     });
   }, [username]);
 
@@ -63,11 +62,11 @@ export default function UserPage() {
     setEditMode(false);
   }
 
-  function toggleFollow(){
-    setIsFollowing(prev => !prev);
-    axios.post('/api/followers',{
-      destination : profileInfo?._id,
-    })
+  function toggleFollow() {
+    setIsFollowing((prev) => !prev);
+    axios.post("/api/followers", {
+      destination: profileInfo?._id,
+    });
   }
   const isMyProfile = profileInfo?._id === userInfo?._id;
 
@@ -204,7 +203,10 @@ export default function UserPage() {
       )}
       {posts?.length > 0 &&
         posts.map((post) => (
-          <div className="p-5 border-t border-twitterBorder" key={post}>
+          <div
+            className="p-5 border-t border-twitterBorder"
+            key={post}
+          >
             <PostContent
               {...post}
               likedByMe={postsLikedByMe.includes(post._id)}

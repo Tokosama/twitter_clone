@@ -1,4 +1,4 @@
-import Layout from "@/components/Layout";
+import Layout from "@/pages/Layout";
 import PostContent from "@/components/PostContent";
 import PostForm from "@/components/PostForm";
 import TopNavLink from "@/components/TopNavLink";
@@ -36,45 +36,53 @@ export default function PostPage() {
   }, [id]);
   return (
     <Layout>
-      {!!post?._id && (
-        <div className="px-5 py-2">
-          <TopNavLink />
-          {post.parent && (
-            <div className="pb-1">
-              <PostContent {...post.parent} />
-              <div className="ml-5 h-12 relative">
-                <div className="h-20 border-l-2 border-twitterBorder  absolute -top-6" style={{marginLeft:'2px'}}></div>
+      <div>
+        {!!post?._id && (
+          <div className="px-5 py-2">
+            <TopNavLink />
+            {post.parent && (
+              <div className="pb-1">
+                <PostContent {...post.parent} />
+                <div className="ml-5 h-12 relative">
+                  <div
+                    className="h-20 border-l-2 border-twitterBorder  absolute -top-6"
+                    style={{ marginLeft: "2px" }}
+                  ></div>
+                </div>
               </div>
-            </div>
-          )}
-          <div>
-            <PostContent
-              {...post}
-              big
-            />
-          </div>
-        </div>
-      )}
-      {!!userInfo && (
-        <div className="border-t border-twitterBorder py-5 ">
-          <PostForm
-            onPost={fetchData}
-            parent={id}
-            compact
-            placeholder={"Tweet you reply"}
-          />
-        </div>
-      )}
-      <div className="">
-        {replies.length > 0 &&
-          replies.map((reply) => (
-            <div key={reply._id} className="p-5 border-t border-twitterBorder">
+            )}
+            <div>
               <PostContent
-                {...reply}
-                likedByMe={repliesLikedByMe.includes(reply._id)}
+                {...post}
+                big
               />
             </div>
-          ))}
+          </div>
+        )}
+        {!!userInfo && (
+          <div className="border-t border-twitterBorder py-5 ">
+            <PostForm
+              onPost={fetchData}
+              parent={id}
+              compact
+              placeholder={"Tweet you reply"}
+            />
+          </div>
+        )}
+        <div className="">
+          {replies.length > 0 &&
+            replies.map((reply) => (
+              <div
+                key={reply._id}
+                className="p-5 border-t border-twitterBorder"
+              >
+                <PostContent
+                  {...reply}
+                  likedByMe={repliesLikedByMe.includes(reply._id)}
+                />
+              </div>
+            ))}
+        </div>
       </div>
     </Layout>
   );
