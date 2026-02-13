@@ -6,8 +6,9 @@ import useUserInfo from "@/hooks/useUserInfo";
 import axios from "axios";
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
-
 import { useEffect, useState } from "react";
+
+import Spinner from "@/components/Spinner";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -33,7 +34,11 @@ export default function Home() {
   }, []);
 
   if (userInfoStatus === "loading") {
-    return "loading user info";
+    return (
+      <div className=" w-full h-screen flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
   }
 
   if (userInfo && !userInfo?.username) {
@@ -46,7 +51,11 @@ export default function Home() {
 
   if (!userInfo) {
     router.push("/login");
-    return "no user info";
+    return (
+      <div className=" w-full h-screen flex justify-center items-center">
+        <Spinner />
+      </div>
+    );
   }
 
   return (
