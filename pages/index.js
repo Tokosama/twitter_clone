@@ -62,8 +62,18 @@ export default function Home() {
     <div>
       <Layout>
         <div className="h-full">
-          <h1 className="text-xl font-bold p-4">Home</h1>
-
+          <div className="sticky top-0 left-0 w-full grid grid-cols-2 text-center border-b border-twitterBorder bg-transparent backdrop-blur-xl z-50">
+            <div className="h-14 flex justify-center   items-center flex-col font-semibold">
+              <span className=" h-9 border-b-[4px] mt-3  border-twitterBlue">
+                For you
+              </span>
+            </div>
+            <div className="h-14 flex justify-center   items-center flex-col font-semibold">
+              <span className=" h-9 border-b-[4px] mt-3  border-twitterBlue">
+                Following
+              </span>
+            </div>{" "}
+          </div>
           <PostForm
             onPost={() => {
               fetcHomePosts();
@@ -72,7 +82,7 @@ export default function Home() {
 
           <div className="">
             {posts.length > 0 &&
-              posts.map((post) => (
+              posts.map((post, index) => (
                 <>
                   <div
                     key={post._id}
@@ -80,15 +90,16 @@ export default function Home() {
                   >
                     {post.parent && (
                       <div>
-                        <PostContent {...post.parent} />
-                        <div className="relative h-8">
-                          <div className="border-l-2 border-twitterBorder h-14 absolute ml-6 -top-6"></div>
-                        </div>
+                        <PostContent
+                          {...post.parent}
+                          showLine={!!post.parent}
+                        />
                       </div>
                     )}
                     <PostContent
                       {...post}
                       likedByMe={idsLikedByMe.includes(post._id)}
+                      showLine={false}
                     />
                   </div>
                 </>

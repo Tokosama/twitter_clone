@@ -14,18 +14,22 @@ export default function PostContent({
   commentsCount,
   images,
   big = false,
+  showLine = false, // 👈 ajoute ceci
 }) {
   function showImages() {
-    if(!images.length){
-      return '';
+    if (!images.length) {
+      return "";
     }
     return (
       <>
-        <div className=" flex -mx-1 border items-center my-4 border-[#272A2D] rounded-xl overflow-hidden gap-[1px] ">
+        <div className=" flex -mx-1 ml-1 border items-center my-4 border-[#272A2D] rounded-xl overflow-hidden gap-[1px] ">
           {images?.length > 0 &&
             images.map((img) => (
               <>
-                <div key={img} className=" h-full">
+                <div
+                  key={img}
+                  className=" h-full"
+                >
                   <img
                     src={img}
                     alt=""
@@ -40,7 +44,7 @@ export default function PostContent({
   return (
     <>
       <div className="flex w-full ">
-        <div>
+        <div className="flex flex-col items-center mr-1">
           {!!author?.image && (
             <Link href={"/" + author?.username}>
               <div className="cursor-pointer">
@@ -48,6 +52,10 @@ export default function PostContent({
               </div>
             </Link>
           )}
+          {/* ligne verticale */}
+          {showLine && !big && (
+            <div className="w-[2px] flex-1 bg-twitterBorder my-1 "></div>
+          )}{" "}
         </div>
         <div className="pl-2 grow ">
           <div>
