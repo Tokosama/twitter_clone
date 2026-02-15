@@ -91,7 +91,7 @@ export default function UserPage() {
   }
   const isMyProfile = profileInfo?._id === userInfo?._id;
 
-  console.log(profileInfo)
+  console.log(profileInfo);
   return (
     <Layout>
       <div>
@@ -259,18 +259,29 @@ export default function UserPage() {
             </div>
           </>
         )}
-        {posts?.length > 0 &&
-          posts.map((post) => (
-            <div
-              className="p-5 border-t border-twitterBorder"
-              key={post}
-            >
-              <PostContent
-                {...post}
-                likedByMe={postsLikedByMe.includes(post._id)}
-              />
-            </div>
-          ))}
+
+        <div>
+          <div className="flex w-[600px] ">
+            <div className="px-6 flex-1 text-center">Posts</div>
+            <div className="px-6 flex-1 text-center ">Posts</div>
+            <div className="px-6 flex-1 text-center ">Posts</div>
+            <div className="px-6 flex-1 text-center ">Posts</div>
+            <div className="px-6 flex-1 text-center ">Posts</div>
+            <div className="px-6 flex-1 text-center ">Posts</div>
+          </div>
+          {posts?.length > 0 &&
+            posts.map((post) => (
+              <div
+                className="p-5 border-t border-twitterBorder"
+                key={post}
+              >
+                <PostContent
+                  {...post}
+                  likedByMe={postsLikedByMe.includes(post._id)}
+                />
+              </div>
+            ))}
+        </div>
       </div>
     </Layout>
   );

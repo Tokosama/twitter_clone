@@ -2,30 +2,96 @@ import useUserInfo from "@/hooks/useUserInfo";
 import Link from "next/link";
 import React from "react";
 import Avatar from "./Avatar";
-import { Feather } from "lucide-react";
+import {
+  BellDot,
+  CircleEllipsis,
+  Feather,
+  House,
+  Mail,
+  Search,
+  UserRound,
+} from "lucide-react";
 
 export default function Sidebar() {
   const { userInfo } = useUserInfo();
 
   const sidebarLinks = [
-    { name: "Home", href: "/", icon: "/icons/icon_home.svg" },
-    // { name: "Exploration", href: "#", icon: "/icons/icon_search.svg" },
-    // { name: "Notifications", href: "#", icon: "/icons/icon_notification.svg" },
-    // { name: "Messages", href: "#", icon: "/icons/icon_mail.svg" },
-    // { name: "Lists", href: "#", icon: "/icons/icon_list.svg" },
-    // { name: "Bookmarks", href: "#", icon: "/icons/icon_bookmark.svg" },
-    // { name: "Verified", href: "#", icon: "/icons/icon_verified.svg" },
+     {
+      name: "Home",
+      href: "/",
+      icon: (
+        <House
+          size={26}
+          color="white"
+        />
+      ),
+    },
+    {
+      name: "Explore",
+      href: "#",
+      icon: (
+        <Search
+          size={26}
+          color="white"
+        />
+      ),
+    },
+    {
+      name: "Notifications",
+      href: "#",
+      icon: (
+        <BellDot
+          size={26}
+          color="white"
+        />
+      ),
+    },
+    {
+      name: "Follow",
+      href: "#",
+      icon: (
+        <UserRound
+          size={26}
+          color="white"
+        />
+      ),
+    },
+    {
+      name: "Chat",
+      href: "#",
+      icon: (
+        <Mail
+          size={26}
+          color="white"
+        />
+      ),
+    },
+   
     {
       name: "Profile",
       href: `/${userInfo?.username}`,
-      icon: "/icons/icon_profile.svg",
+      icon: (
+        <UserRound
+          size={26}
+          color="white"
+        />
+      ),
     },
-    { name: "More", href: "#", icon: "/icons/icon_3dots.svg" },
+    {
+      name: "More",
+      href: "#",
+      icon: (
+        <CircleEllipsis
+          size={26}
+          color="white"
+        />
+      ),
+    },
   ];
 
   return (
-    <div className="block xl:w-64  border-black text-xl font-lg text-white pl-5 xl:pl-0 xl:pr-5">
-      <div className="top-4 sticky ml-4">
+    <div className="block w-64 xl:w-auto relative border-black text-xl font-lg text-white pl-5 xl:pl-0 xl:pr-5">
+      <div className="sticky top-4 ml-14 flex flex-col h-[calc(100vh-1rem)] overflow-x-auto">
         {/* Logo */}
         <Link
           href="/"
@@ -49,22 +115,19 @@ export default function Sidebar() {
             <Link
               key={link.name}
               href={link.href}
-              className="block my-2 p-1"
+              className="block my-2 py-1 pr-[12-px]"
             >
-              <span className="h-11 mr-3 inline-flex items-center hover:bg-zinc-700 w-auto p-4 rounded-full  xl:rounded-3xl">
-                <img
-                  src={link.icon}
-                  className="mr-3 w-9 h-7"
-                  alt={link.name}
-                />
-                <span className=" hidden xl:flex">{link.name}</span>
+              <span className="h-11 xl:mr-3 inline-flex justify-center ml-2 items-center hover:bg-zinc-700 w-auto p-4 rounded-full  xl:rounded-3xl">
+                {link.icon}
+
+                <span className=" hidden xl:flex mt-1 ml-5">{link.name}</span>
               </span>
             </Link>
           ))}
         </div>
 
         {/* Tweet Button */}
-        <button className="xl:w-52 my-3 px-3 text-base font-semibold text-black bg-white rounded-full h-12 flex justify-center items-center ml-3 ">
+        <button className="xl:w-52 my-3 w-12 h-12 py-5 mr-5  text-base font-semibold text-black bg-white rounded-full  flex justify-center items-center ml-3 ">
           <span className="xl:hidden">
             <Feather size={24} />
           </span>
@@ -72,7 +135,7 @@ export default function Sidebar() {
         </button>
 
         {/* User info */}
-        <div className="flex items-center xl:w-56 text-base ml-4 xl:ml-2 mr-3 mt-12 fixed bottom-3">
+        <div className="flex items-center xl:w-56 text-base ml-4 mb-4 xl:ml-2 mr-3 mt-auto">
           <Avatar src={userInfo?.image} />
           <div className="hidden xl:flex flex-col items-start ml-2">
             <strong>{userInfo?.name}</strong>
