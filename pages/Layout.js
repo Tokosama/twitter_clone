@@ -1,3 +1,4 @@
+import Trend from "@/components/Trend";
 import Sidebar from "../components/Sidebar";
 
 export default function Layout({ children }) {
@@ -7,7 +8,7 @@ export default function Layout({ children }) {
       <div className=" pb-24 lg:pb-4   w-full  flex justify-around border  border-twitterBorder">
         <div className="w-full">{children}</div>
       </div>{" "}
-      <Sidebar />
+      <Trend />
     </div>
   );
 }

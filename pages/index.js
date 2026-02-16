@@ -72,7 +72,7 @@ export default function Home() {
               <span className=" h-9 border-b-[4px] mt-3  border-twitterBlue">
                 Following
               </span>
-            </div>{" "}
+            </div>
           </div>
           <PostForm
             onPost={() => {

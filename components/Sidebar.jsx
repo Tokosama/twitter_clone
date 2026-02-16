@@ -26,46 +26,46 @@ export default function Sidebar() {
         />
       ),
     },
-    {
-      name: "Explore",
-      href: "#",
-      icon: (
-        <Search
-          size={26}
-          color="white"
-        />
-      ),
-    },
-    {
-      name: "Notifications",
-      href: "#",
-      icon: (
-        <BellDot
-          size={26}
-          color="white"
-        />
-      ),
-    },
-    {
-      name: "Follow",
-      href: "#",
-      icon: (
-        <UserRound
-          size={26}
-          color="white"
-        />
-      ),
-    },
-    {
-      name: "Chat",
-      href: "#",
-      icon: (
-        <Mail
-          size={26}
-          color="white"
-        />
-      ),
-    },
+    // {
+    //   name: "Explore",
+    //   href: "#",
+    //   icon: (
+    //     <Search
+    //       size={26}
+    //       color="white"
+    //     />
+    //   ),
+    // },
+    // {
+    //   name: "Notifications",
+    //   href: "#",
+    //   icon: (
+    //     <BellDot
+    //       size={26}
+    //       color="white"
+    //     />
+    //   ),
+    // },
+    // {
+    //   name: "Follow",
+    //   href: "#",
+    //   icon: (
+    //     <UserRound
+    //       size={26}
+    //       color="white"
+    //     />
+    //   ),
+    // },
+    // {
+    //   name: "Chat",
+    //   href: "#",
+    //   icon: (
+    //     <Mail
+    //       size={26}
+    //       color="white"
+    //     />
+    //   ),
+    // },
    
     {
       name: "Profile",
@@ -77,16 +77,16 @@ export default function Sidebar() {
         />
       ),
     },
-    {
-      name: "More",
-      href: "#",
-      icon: (
-        <CircleEllipsis
-          size={26}
-          color="white"
-        />
-      ),
-    },
+    // {
+    //   name: "More",
+    //   href: "#",
+    //   icon: (
+    //     <CircleEllipsis
+    //       size={26}
+    //       color="white"
+    //     />
+    //   ),
+    // },
   ];
 
   return (

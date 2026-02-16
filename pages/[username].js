@@ -89,9 +89,13 @@ export default function UserPage() {
       destination: profileInfo?._id,
     });
   }
+
+  async function verifiedUser() {
+    axios.patch("/api/verifyUser");
+  }
   const isMyProfile = profileInfo?._id === userInfo?._id;
 
-  console.log(profileInfo);
+ 
   return (
     <Layout>
       <div>
@@ -207,18 +211,24 @@ export default function UserPage() {
                     </span>
                     {followerStats.followers <= 0 ? "Follower" : "Followers"}
                   </div>
-                  <div className=" w-full my-3 p-4 bg-[#004329] rounded-xl">
-                    <div className="flex text-xl gap-2 font-semibold items-center">
-                      You aren't verified yet <BadgeCheck size={24} />{" "}
+
+                  {!userInfo?.verified && (
+                    <div className=" w-full my-3 p-4 bg-[#004329] rounded-xl">
+                      <div className="flex text-xl gap-2 font-semibold items-center">
+                        You aren't verified yet <BadgeCheck size={24} />{" "}
+                      </div>
+                      <div className="text-sm my-2">
+                        Get verified for boosted replies, analytics, ad-free
+                        browsing, and more. Upgrade your profile now.
+                      </div>
+                      <button
+                        className="bg-white text-black mt-1 text-sm font-semibold py-1 px-3 rounded-2xl"
+                        onClick={verifiedUser}
+                      >
+                        Get verified
+                      </button>
                     </div>
-                    <div className="text-sm my-2">
-                      Get verified for boosted replies, analytics, ad-free
-                      browsing, and more. Upgrade your profile now.
-                    </div>
-                    <button className="bg-white text-black mt-1 text-sm font-semibold py-1 px-3 rounded-2xl">
-                      Get verified
-                    </button>
-                  </div>
+                  )}
                 </div>
               )}
               {editMode && (
@@ -261,13 +271,17 @@ export default function UserPage() {
         )}
 
         <div>
-          <div className="flex w-[600px] ">
-            <div className="px-6 flex-1 text-center">Posts</div>
-            <div className="px-6 flex-1 text-center ">Posts</div>
-            <div className="px-6 flex-1 text-center ">Posts</div>
-            <div className="px-6 flex-1 text-center ">Posts</div>
-            <div className="px-6 flex-1 text-center ">Posts</div>
-            <div className="px-6 flex-1 text-center ">Posts</div>
+          <div className="sticky top-0 left-0 w-full grid grid-cols-2 text-center border-b border-twitterBorder bg-transparent backdrop-blur-xl z-50">
+            <div className="h-14 flex justify-center   items-center flex-col font-semibold">
+              <span className=" h-9 border-b-[5px] mt-5 px-5 pb-9 border-twitterBlue">
+                Posts{" "}
+              </span>
+            </div>
+            <div className="h-14 flex justify-center   items-center flex-col font-semibold">
+              <span className=" h-9 border-b-[5px] mt-5 px-5 pb-9 border-twitterBlue">
+                Following
+              </span>
+            </div>
           </div>
           {posts?.length > 0 &&
             posts.map((post) => (
