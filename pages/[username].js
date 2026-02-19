@@ -25,6 +25,7 @@ export default function UserPage() {
     followers: 0,
     following: 0,
   });
+  const [togglePost, setTogglePost] = useState(false);
 
   useEffect(() => {
     if (!username) {
@@ -95,7 +96,6 @@ export default function UserPage() {
   }
   const isMyProfile = profileInfo?._id === userInfo?._id;
 
- 
   return (
     <Layout>
       <div>
@@ -212,7 +212,7 @@ export default function UserPage() {
                     {followerStats.followers <= 0 ? "Follower" : "Followers"}
                   </div>
 
-                  {!userInfo?.verified && (
+                  {!userInfo?.verified && isMyProfile && (
                     <div className=" w-full my-3 p-4 bg-[#004329] rounded-xl">
                       <div className="flex text-xl gap-2 font-semibold items-center">
                         You aren't verified yet <BadgeCheck size={24} />{" "}
@@ -248,7 +248,9 @@ export default function UserPage() {
               )}
 
               {!editMode && (
-                <div className="text-sm mt-2 mb-2">{profileInfo.bio}</div>
+                <div className="w-full text-sm mt-2 mb-2">
+                  {profileInfo.bio}
+                </div>
               )}
               {editMode && (
                 <div>
@@ -272,13 +274,27 @@ export default function UserPage() {
 
         <div>
           <div className="sticky top-0 left-0 w-full grid grid-cols-2 text-center border-b border-twitterBorder bg-transparent backdrop-blur-xl z-50">
-            <div className="h-14 flex justify-center   items-center flex-col font-semibold">
-              <span className=" h-9 border-b-[5px] mt-5 px-5 pb-9 border-twitterBlue">
-                Posts{" "}
+            <div
+              onClick={() => {
+                setTogglePost(false);
+              }}
+              className="h-14 flex justify-center hover:bg-twitterBorder   items-center flex-col font-semibold"
+            >
+              <span
+                className={`h-9  mt-3 ${!togglePost ? " border-b-[4px] border-twitterBlue " : "text-twitterLightGray "}`}
+              >
+                For you{" "}
               </span>
             </div>
-            <div className="h-14 flex justify-center   items-center flex-col font-semibold">
-              <span className=" h-9 border-b-[5px] mt-5 px-5 pb-9 border-twitterBlue">
+            <div
+              onClick={() => {
+                setTogglePost(true);
+              }}
+              className="h-14 flex justify-center   hover:bg-twitterBorder  items-center flex-col font-semibold"
+            >
+              <span
+                className={`h-9 mt-3 ${togglePost ? " border-b-[4px]  border-twitterBlue  " : " text-twitterLightGray"}`}
+              >
                 Following
               </span>
             </div>

@@ -44,7 +44,7 @@ export default function Trend() {
   }, []);
   console.log(usersToFollow);
   return (
-    <div className="mx-5">
+    <div className="mx-5 hidden xs:visible">
       <div className="  mt-3  border border-twitterBorder text-white w-80 pt-4 flex flex-col h-auto rounded-2xl overflow-hidden">
         <div className="text-xl font-extrabold mb-3 px-4 ">Trends for you</div>
         <div className=" mt pb-3 -3 px-4 hover:bg-zinc-700">

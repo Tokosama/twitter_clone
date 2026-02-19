@@ -4,7 +4,7 @@ import { useState } from "react";
 import Avatar from "./Avatar";
 
 import Upload from "./Upload";
-import { PulseLoader } from "react-spinners";
+import { ClipLoader, PulseLoader } from "react-spinners";
 import { Image, Smile } from "lucide-react";
 import Picker from "@emoji-mart/react";
 import emojiData from "@emoji-mart/data";
@@ -15,6 +15,8 @@ export default function PostForm({
   parent,
   placeholder = "What's happenning? ",
 }) {
+  const [postLoading, setPostLoading] = useState(false);
+
   const { userInfo, status } = useUserInfo();
   const [text, setText] = useState("");
   const [images, setImages] = useState([]);
@@ -29,6 +31,7 @@ export default function PostForm({
     setText((prev) => prev + emoji.native);
   };
   async function handlePostSubmit(e) {
+    setPostLoading(true);
     e.preventDefault();
     await axios.post("/api/posts", { text, parent, images });
     setText("");
@@ -36,10 +39,11 @@ export default function PostForm({
     if (onPost) {
       onPost();
     }
+    setPostLoading(false);
   }
   return (
     <form
-      className="mx-5 my-5"
+      className=" my-5"
       onSubmit={handlePostSubmit}
     >
       <div className={(compact ? "items-center " : " ") + "flex "}>
@@ -53,8 +57,12 @@ export default function PostForm({
                 <textarea
                   className={
                     (compact ? " mt-1 " : " ") +
-                    "w-full p-2 bg-transparent text-twitterWhite focus:outline-none"
+                    "resize-none min-h-24 w-full p-2 text-xl bg-transparent text-twitterWhite focus:outline-none"
                   }
+                  onInput={(e) => {
+                    e.target.style.height = "auto";
+                    e.target.style.height = e.target.scrollHeight + "px";
+                  }}
                   placeholder={placeholder}
                   onChange={(e) => setText(e.target.value)}
                   value={text}
@@ -85,62 +93,76 @@ export default function PostForm({
               </div>
             )}
           </Upload>
-
-          {!compact && (
-            <div className="text-right border-t border-twitterBorder py-2 flex justify-between pt-4 ">
-              <div className="flex gap-3">
-                <Upload
-                  onUploadFinish={(src) => setImages((prev) => [...prev, src])}
-                >
-                  {({ openFileDialog }) => (
-                    <button
-                      type="button"
-                      onClick={openFileDialog}
-                      className="mt-2"
-                    >
-                      <Image
-                        size={22}
-                        color="#308CD8"
-                      />
-                    </button>
-                  )}
-                </Upload>
-
-                <button
-                  type="button"
-                  onClick={() => setShowEmojiPicker((prev) => !prev)}
-                  className=""
-                >
-                  <Smile
-                    size={22}
-                    color="#308CD8"
-                  />
-                </button>
-
-                {showEmojiPicker && (
-                  <div className="absolute z-50">
-                    <Picker
-                      data={emojiData}
-                      onEmojiSelect={addEmoji}
-                    />
-                  </div>
-                )}
-              </div>
-
-              <button className="bg-white text-black font-semibold px-5 py-1 rounded-full ">
-                tweet
-              </button>
-            </div>
-          )}
         </div>
         {compact && (
           <div className="pl-2 ">
             <button className="bg-white text-black font-semibold px-5 py-1 rounded-full ">
-              tweet
+              {postLoading ? (
+                <ClipLoader
+                  color="#26282A"
+                  size={20}
+                />
+              ) : (
+                "Post"
+              )}
             </button>
           </div>
         )}
       </div>
+
+      {!compact && (
+        <div className="text-right border-t border-twitterBorder py-2 flex justify-between pt-4 ">
+          <div className="flex gap-3">
+            <Upload
+              onUploadFinish={(src) => setImages((prev) => [...prev, src])}
+            >
+              {({ openFileDialog }) => (
+                <button
+                  type="button"
+                  onClick={openFileDialog}
+                  className="mt-2"
+                >
+                  <Image
+                    size={22}
+                    color="#308CD8"
+                  />
+                </button>
+              )}
+            </Upload>
+
+            <button
+              type="button"
+              onClick={() => setShowEmojiPicker((prev) => !prev)}
+              className=""
+            >
+              <Smile
+                size={22}
+                color="#308CD8"
+              />
+            </button>
+
+            {showEmojiPicker && (
+              <div className="absolute z-50">
+                <Picker
+                  data={emojiData}
+                  onEmojiSelect={addEmoji}
+                />
+              </div>
+            )}
+          </div>
+
+          <button className="bg-white text-black font-semibold px-5 py-1 rounded-full ">
+            {postLoading ? (
+              <ClipLoader
+                color="#26282A"
+                size={20}
+              />
+            ) : (
+              "Post"
+            )}{" "}
+          </button>
+        </div>
+      )}
     </form>
   );
 }

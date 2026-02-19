@@ -1,8 +1,24 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function UserHoverCard({ children, user }) {
   const [open, setOpen] = useState(false);
+  const [followerStats, setFollowerStats] = useState({
+    followers: 0,
+    following: 0,
+  });
+  useEffect(() => {
+    async function loadFollowStats() {
+      try {
+        const res = await fetch(`/api/follow-stats?userId=${user?._id}`);
+        const data = await res.json();
+        setFollowerStats(data);
+      } catch (err) {
+        console.error(err);
+      }
+    }
 
+    loadFollowStats();
+  }, []);
   return (
     <div
       className="flex "
@@ -12,14 +28,14 @@ export default function UserHoverCard({ children, user }) {
       {children}
 
       {open && (
-        <div className="absolute z-50   mt-11 ml-[-71px] w-72 rounded-2xl border border-[#2f3336] bg-black p-4 shadow-xl">
+        <div className="absolute z-50   mt-11 ml-[-71px] w-72 rounded-2xl border border-[#2f3336] bg-black p-4 shadow-[0_3px_20px_rgba(255,255,255,0.3)]">
           <div className="flex items-center justify-between">
             <img
               src={user.image}
               className="w-12 h-12 rounded-full"
             />
 
-            <button className="px-4 py-1 rounded-full border border-gray-500 text-sm hover:bg-gray-800">
+            <button className="px-4 py-2 rounded-full bg-white  font-semibold text-black border border-gray-500 text-sm hover:bg-gray-800">
               Follow
             </button>
           </div>
@@ -33,10 +49,10 @@ export default function UserHoverCard({ children, user }) {
 
           <div className="flex gap-4 mt-3 text-sm">
             <span>
-              <b>{user.following}</b> Following
+              <b>{followerStats.following}</b> Following
             </span>
             <span>
-              <b>{user.followers}</b> Followers
+              <b>{followerStats.followers}</b> Followers
             </span>
           </div>
 

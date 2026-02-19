@@ -19,9 +19,14 @@ export default async function handler(req, res) {
 
   const followingIds = following.map((f) => f.destination);
   // 2️⃣ récupérer les users qui ne sont PAS dans cette liste
-  const users = await User.find({
-    _id: { $nin: [...followingIds, objectId] }, // exclure aussi moi-même
-  });
+  const users = await User.aggregate([
+    {
+      $match: {
+        _id: { $nin: [...followingIds, objectId] },
+      },
+    },
+    { $sample: { size: 3 } },
+  ]);
   console.log(users);
   res.json(users);
 }

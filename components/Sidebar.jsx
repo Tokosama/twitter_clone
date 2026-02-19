@@ -1,6 +1,7 @@
 import useUserInfo from "@/hooks/useUserInfo";
 import Link from "next/link";
-import React from "react";
+import React, { useState } from "react";
+import AddPost from "./AddPost";
 import Avatar from "./Avatar";
 import {
   BellDot,
@@ -11,12 +12,13 @@ import {
   Search,
   UserRound,
 } from "lucide-react";
+import PostForm from "./PostForm";
 
 export default function Sidebar() {
   const { userInfo } = useUserInfo();
 
   const sidebarLinks = [
-     {
+    {
       name: "Home",
       href: "/",
       icon: (
@@ -46,17 +48,17 @@ export default function Sidebar() {
     //     />
     //   ),
     // },
-    // {
-    //   name: "Follow",
-    //   href: "#",
-    //   icon: (
-    //     <UserRound
-    //       size={26}
-    //       color="white"
-    //     />
-    //   ),
-    // },
-    // {
+    {
+      name: "Follow",
+      href: "/follow",
+      icon: (
+        <UserRound
+          size={26}
+          color="white"
+        />
+      ),
+    },
+    //{
     //   name: "Chat",
     //   href: "#",
     //   icon: (
@@ -66,7 +68,7 @@ export default function Sidebar() {
     //     />
     //   ),
     // },
-   
+
     {
       name: "Profile",
       href: `/${userInfo?.username}`,
@@ -88,9 +90,10 @@ export default function Sidebar() {
     //   ),
     // },
   ];
+  const [openModal, setOpenModal] = useState(false);
 
   return (
-    <div className="block w-64 xl:w-auto relative border-black text-xl font-lg text-white pl-5 xl:pl-0 xl:pr-5">
+    <div className="sm:block w-64 xl:w-auto relative border-black text-xl font-lg text-white pl-5 xl:pl-0 xl:pr-5 hidden">
       <div className="sticky top-4 ml-14 flex flex-col h-[calc(100vh-1rem)] overflow-x-auto">
         {/* Logo */}
         <Link
@@ -108,7 +111,6 @@ export default function Sidebar() {
             </svg>
           </span>
         </Link>
-
         {/* Links */}
         <div className="mt-4">
           {sidebarLinks.map((link) => (
@@ -125,15 +127,45 @@ export default function Sidebar() {
             </Link>
           ))}
         </div>
-
         {/* Tweet Button */}
-        <button className="xl:w-52 my-3 w-12 h-12 py-5 mr-5  text-base font-semibold text-black bg-white rounded-full  flex justify-center items-center ml-3 ">
+        <button
+          onClick={() => setOpenModal(true)}
+          className="xl:w-52 my-3 w-12 h-12 py-5 mr-5  text-base font-semibold text-black bg-white rounded-full  flex justify-center items-center ml-3 "
+        >
           <span className="xl:hidden">
             <Feather size={24} />
           </span>
-          <span className="hidden xl:flex">Tweet</span>
+          <span className="hidden xl:flex">Post</span>
         </button>
+        {openModal && (
+          <AddPost>
+            <div className="">
+              {/* overlay */}
+              <div
+                className="absolute inset-0 bg-[#242D34]/60"
+                onClick={() => setOpenModal(false)}
+              />
 
+              {/* modal */}
+              <div className="relative bg-black w-[600px] max-w-xl rounded-2xl pt-4 px-4 border border-[#2f3336]">
+                {/* close button */}
+                <button
+                  onClick={() => setOpenModal(false)}
+                  className="absolute top-3 left-5 text-gray-400 hover:text-white"
+                >
+                  X
+                </button>
+                <div className="pt-5">
+                  <PostForm
+                    onPost={() => {
+                      window.dispatchEvent(new Event("postCreated"));
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </AddPost>
+        )}
         {/* User info */}
         <div className="flex items-center xl:w-56 text-base ml-4 mb-4 xl:ml-2 mr-3 mt-auto">
           <Avatar src={userInfo?.image} />

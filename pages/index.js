@@ -16,6 +16,9 @@ export default function Home() {
   const { userInfo, setUserInfo, status: userInfoStatus } = useUserInfo();
   const [posts, setPosts] = useState([]);
   const [idsLikedByMe, setIdsLikedByMe] = useState([]);
+  const [postLoading, setPostLoading] = useState(false);
+  const [postButtonLoading, setPostButtonLoading] = useState(false);
+  const [toggleFollow, setToggleFollow] = useState(false);
   const router = useRouter();
   function fetcHomePosts() {
     axios.get("/api/posts").then((response) => {
@@ -30,7 +33,17 @@ export default function Home() {
   }
 
   useEffect(() => {
+    setPostLoading(true);
     fetcHomePosts();
+    function reload() {
+      fetcHomePosts();
+    }
+    window.addEventListener("postCreated", reload);
+
+    setPostLoading(false);
+    return () => {
+      window.removeEventListener("postCreated", reload);
+    };
   }, []);
 
   if (userInfoStatus === "loading") {
@@ -48,7 +61,7 @@ export default function Home() {
       </>
     );
   }
-
+  console.log("/////////////////////////////////////", userInfo);
   if (!userInfo) {
     router.push("/login");
     return (
@@ -63,25 +76,44 @@ export default function Home() {
       <Layout>
         <div className="h-full">
           <div className="sticky top-0 left-0 w-full grid grid-cols-2 text-center border-b border-twitterBorder bg-transparent backdrop-blur-xl z-50">
-            <div className="h-14 flex justify-center   items-center flex-col font-semibold">
-              <span className=" h-9 border-b-[4px] mt-3  border-twitterBlue">
-                For you
+            <div
+              onClick={() => {
+                setToggleFollow(false);
+              }}
+              className="h-14 flex justify-center hover:bg-twitterBorder   items-center flex-col font-semibold"
+            >
+              <span
+                className={`h-9  mt-3 ${!toggleFollow ? " border-b-[4px] border-twitterBlue " : "text-twitterLightGray "}`}
+              >
+                For you{" "}
               </span>
             </div>
-            <div className="h-14 flex justify-center   items-center flex-col font-semibold">
-              <span className=" h-9 border-b-[4px] mt-3  border-twitterBlue">
+            <div
+              onClick={() => {
+                setToggleFollow(true);
+              }}
+              className="h-14 flex justify-center   hover:bg-twitterBorder  items-center flex-col font-semibold"
+            >
+              <span
+                className={`h-9 mt-3 ${toggleFollow ? " border-b-[4px]  border-twitterBlue  " : " text-twitterLightGray"}`}
+              >
                 Following
               </span>
             </div>
           </div>
-          <PostForm
-            onPost={() => {
-              fetcHomePosts();
-            }}
-          />
+          <div className="px-5">
+            <PostForm
+              onPost={() => {
+                fetcHomePosts();
+              }}
+            />
+          </div>
 
           <div className="">
-            {posts.length > 0 &&
+            {postButtonLoading ? (
+              <Spinner />
+            ) : (
+              posts.length > 0 &&
               posts.map((post, index) => (
                 <>
                   <div
@@ -103,7 +135,8 @@ export default function Home() {
                     />
                   </div>
                 </>
-              ))}
+              ))
+            )}
           </div>
           {userInfo && (
             <div className="p-5 text-center border-t border-twitterBorder">
