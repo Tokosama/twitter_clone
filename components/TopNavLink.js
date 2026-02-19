@@ -20,9 +20,9 @@ export default function TopNavLink({ title = "Tweet", url = "/", length }) {
           <path d="M19 12H5" />
         </svg>
         <div className="">
-          <span className="text-xl font-bold">{title}</span>
+          <span className="text-base sm:text-xl font-bold">{title}</span>
 
-          <div className="font-normal text-twitterLightGray"> {length} posts</div>
+          <div className="font-normal text-sm text-twitterLightGray"> {length} posts</div>
         </div>
 
         <svg

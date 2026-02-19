@@ -9,6 +9,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
 import Spinner from "@/components/Spinner";
+import MobileTopComponent from "@/components/MobileTopComponent";
 
 export default function Home() {
   const { data: session } = useSession();
@@ -75,6 +76,7 @@ export default function Home() {
     <div>
       <Layout>
         <div className="h-full">
+          <MobileTopComponent profileInfo={userInfo} />
           <div className="sticky top-0 left-0 w-full grid grid-cols-2 text-center border-b border-twitterBorder bg-transparent backdrop-blur-xl z-50">
             <div
               onClick={() => {

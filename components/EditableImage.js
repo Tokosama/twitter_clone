@@ -43,7 +43,7 @@ if(!editable) extraClasses ="";
         setIsFileOver(false)
       }}
     >
-      <div className={" bg-twitterBorder relative "}>
+      <div className={" bg-twitterBorder  relative "}>
         <div className={"absolute inset-0 " + extraClasses}></div>
         {isUploading && (
           <div
