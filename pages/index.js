@@ -62,7 +62,6 @@ export default function Home() {
       </>
     );
   }
-  console.log("/////////////////////////////////////", userInfo);
   if (!userInfo) {
     router.push("/login");
     return (
@@ -117,9 +116,9 @@ export default function Home() {
             ) : (
               posts.length > 0 &&
               posts.map((post, index) => (
-                <>
+                
                   <div
-                    key={post._id}
+                    key={index}
                     className=" border-t border-twitterBorder p-5"
                   >
                     {post.parent && (
@@ -136,7 +135,7 @@ export default function Home() {
                       showLine={false}
                     />
                   </div>
-                </>
+                
               ))
             )}
           </div>

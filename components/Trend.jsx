@@ -42,7 +42,6 @@ export default function Trend() {
 
     fetchUsers();
   }, []);
-  console.log(usersToFollow);
   return (
     <div className="mx-5 hidden xs:visible">
       <div className="  mt-3  border border-twitterBorder text-white w-80 pt-4 flex flex-col h-auto rounded-2xl overflow-hidden">
@@ -88,14 +87,16 @@ export default function Trend() {
       <div className="  mt-3 px-4  border border-twitterBorder text-white w-80  flex flex-col h-auto rounded-2xl overflow-hidden ">
         <div className="text-xl my-3 font-bold mb-3  ">Who to follow</div>
         {usersToFollow.map((user, index) => (
-          <div className="flex items-center  text-base py-3 cursor-pointer">
-           
+          <div
+            className="flex items-center  text-base py-3 cursor-pointer"
+            key={index}
+          >
             <UserHoverCard user={user}>
-               {user.image ? (
-              <Avatar src={user?.image} />
-            ) : (
-              <CircleUser size={39} />
-            )}
+              {user.image ? (
+                <Avatar src={user?.image} />
+              ) : (
+                <CircleUser size={39} />
+              )}
               <Link
                 href={"/" + user?.username}
                 className=" ml-2 flex-col items-center"
@@ -134,7 +135,7 @@ export default function Trend() {
       </div>
       <div className="px-4 py-6 text-twitterLightGray flex-wrap  w-80 text-xs">
         {termsAndPolicy.map((term, index) => (
-          <div className="inline-flex my-1">
+          <div className="inline-flex my-1" key={index}>
             <span className="mr-3">{term}</span>
             {index != termsAndPolicy.length - 1 && (
               <span className="mr-3">|</span>
@@ -145,4 +146,3 @@ export default function Trend() {
     </div>
   );
 }
-67354848;

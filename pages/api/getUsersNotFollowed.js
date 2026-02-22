@@ -6,7 +6,6 @@ import Follower from "@/models/Follower";
 import mongoose from "mongoose";
 
 export default async function handler(req, res) {
-  console.log("//////////////////////////////////");
 
   await initMongoose();
   const session = await getServerSession(req, res, authOptions);
@@ -27,6 +26,5 @@ export default async function handler(req, res) {
     },
     { $sample: { size: 3 } },
   ]);
-  console.log(users);
   res.json(users);
 }

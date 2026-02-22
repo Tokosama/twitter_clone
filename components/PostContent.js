@@ -25,7 +25,7 @@ export default function PostContent({
         <div className=" flex -mx-1 ml-1 border items-center my-4 border-[#272A2D] rounded-xl overflow-hidden gap-[1px] ">
           {images?.length > 0 &&
             images.map((img) => (
-              <>
+              
                 <div
                   key={img}
                   className=" h-full"
@@ -35,12 +35,13 @@ export default function PostContent({
                     alt=""
                   />
                 </div>
-              </>
+              
             ))}
         </div>
       </>
     );
   }
+  const timestamp = new Date(createdAt).getTime();
   return (
     <>
       <div className="flex w-full ">
@@ -74,7 +75,7 @@ export default function PostContent({
               <span className="pl-1 text-twitterLightGray">
                 {" "}
                 <ReactTimeAgo
-                  date={createdAt}
+                  date={timestamp}
                   timeStyle={"twitter"}
                 />{" "}
               </span>

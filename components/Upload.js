@@ -58,7 +58,6 @@ export default function Upload({ children, onUploadFinish }) {
             hidden
             id="upload-input"
             onChange={(e) => {
-              //console.log(e.target.files);
               uploadImage(e.target.files, e);
             }}
           />

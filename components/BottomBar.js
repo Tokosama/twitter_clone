@@ -87,26 +87,25 @@ export default function BottomNavBar() {
   return (
     <div className="fixed  sm:hidden bottom-0 left-0 w-full grid grid-cols-5 text-center border-t border-twitterBorder bg-transparent backdrop-blur-xl z-50">
       {bottomBarLink.map((link, index) => (
-        <>
-          <div
-            onClick={() => {
-              setToggleFollow(false);
-            }}
-            className=" flex justify-center hover:bg-twitterBorder   items-center flex-col font-semibold"
+        <div
+          key={index}
+          onClick={() => {
+            setToggleFollow(false);
+          }}
+          className=" flex justify-center hover:bg-twitterBorder   items-center flex-col font-semibold"
+        >
+          <Link
+            key={link.name}
+            href={link.href}
+            className="block my-2 py-1 pr-[12-px]"
           >
-            <Link
-              key={link.name}
-              href={link.href}
-              className="block my-2 py-1 pr-[12-px]"
-            >
-              <span className={`h-9  mt-3 `}>
-                <span className=" inline-flex justify-center ml-2 items-center hover:bg-zinc-700 w-auto  rounded-full  xl:rounded-3xl">
-                  {link.icon}
-                </span>
+            <span className={`h-9  mt-3 `}>
+              <span className=" inline-flex justify-center ml-2 items-center hover:bg-zinc-700 w-auto  rounded-full  xl:rounded-3xl">
+                {link.icon}
               </span>
-            </Link>
-          </div>
-        </>
+            </span>
+          </Link>
+        </div>
       ))}
     </div>
   );

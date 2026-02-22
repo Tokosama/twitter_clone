@@ -19,6 +19,9 @@ export default function Document() {
           href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
           rel="stylesheet"
         />
+         <link rel="icon" href="/icon.png" type="image/svg+xml" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <title>Mon App</title>
       </Head>
       <body className="antialiased font-montserrat">
         <Main />

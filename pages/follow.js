@@ -130,7 +130,7 @@ export default function follow() {
           </div>
         ) : (
           (!toggleCreator ? usersToFollow : usersCreator).map((user, index) => (
-            <div className="">
+            <div className="" key={index}>
               <div className="flex text-base py-3 cursor-pointer">
                 <div className=" flex h-full justify-start align-top items-start">
                   <UserHoverCard user={user}>
