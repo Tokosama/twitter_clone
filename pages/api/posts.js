@@ -7,6 +7,7 @@ import Follower from "@/models/Follower";
 
 export default async function handler(req, res) {
   try {
+    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
     await initMongoose();
     const session = await getServerSession(req, res, authOptions);
 
