@@ -13,8 +13,48 @@ export default async function handler(req, res) {
     if (!session) return res.status(401).json({ error: "Not authenticated" });
 
     if (req.method === "GET") {
-      // ton code GET...
-    } else if (req.method === "POST") {
+      const { id } = req.query;
+      if (id) {
+        const post = await Post.findById(id)
+          .populate("author")
+          .populate({ path: "parent", populate: "author" });
+        res.json({ post });
+      } else {
+        const parent = req.query.parent || null;
+        const author = req.query.author;
+        let searchFilter;
+        if (!author && !parent) {
+          const myFollows = await Follower.find({
+            source: session?.user.id,
+          }).exec();
+          const idsOfPeopleIFollow = myFollows.map((f) => f.destination);
+          searchFilter = { author: [...idsOfPeopleIFollow, session?.user.id] };
+        }
+        if (author) {
+          searchFilter = { author };
+        }
+        if (parent) {
+          searchFilter = { parent };
+        }
+        const posts = await Post.find(searchFilter)
+          .populate("author")
+          .populate({ path: "parent", populate: "author" })
+          .sort({ createdAt: -1 })
+          .limit(20)
+          .exec();
+        const postsLikedByMe = await Like.find({
+          author: session?.user.id,
+          post: posts.map((p) => p._id),
+        });
+        const idsLikedByMe = postsLikedByMe.map((like) => like.post);
+        res.json({
+          posts,
+          idsLikedByMe,
+        });
+      }
+    }
+    // Post request
+    else if (req.method === "POST") {
       const { text, parent, images } = req.body;
       if (!text && (!images || images.length === 0)) {
         return res.status(400).json({ error: "Text or images required" });
