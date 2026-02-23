@@ -11,6 +11,7 @@ import {
   Mail,
   Search,
   UserRound,
+  UserRoundPlus,
 } from "lucide-react";
 import PostForm from "./PostForm";
 
@@ -18,6 +19,27 @@ export default function BottomNavBar() {
   const { userInfo } = useUserInfo();
 
   const bottomBarLink = [
+    {
+      name: "Chat",
+      href: "#",
+      icon: (
+        <Mail
+          size={26}
+          color="white"
+        />
+      ),
+    },
+
+    {
+      name: "Profile",
+      href: `/${userInfo?.username}`,
+      icon: (
+        <UserRound
+          size={26}
+          color="white"
+        />
+      ),
+    },
     {
       name: "Home",
       href: "/",
@@ -39,31 +61,10 @@ export default function BottomNavBar() {
       ),
     },
     {
-      name: "Profile",
-      href: `/${userInfo?.username}`,
-      icon: (
-        <UserRound
-          size={26}
-          color="white"
-        />
-      ),
-    },
-
-    {
       name: "Follow",
       href: "/follow",
       icon: (
-        <UserRound
-          size={26}
-          color="white"
-        />
-      ),
-    },
-    {
-      name: "Chat",
-      href: "#",
-      icon: (
-        <Mail
+        <UserRoundPlus
           size={26}
           color="white"
         />

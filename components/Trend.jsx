@@ -43,8 +43,8 @@ export default function Trend() {
     fetchUsers();
   }, []);
   return (
-    <div className="mx-5 hidden xs:visible">
-      <div className="  mt-3  border border-twitterBorder text-white w-80 pt-4 flex flex-col h-auto rounded-2xl overflow-hidden">
+    <div className="mx-5 hidden sm:block">
+      {/* <div className="  mt-3  border border-twitterBorder text-white w-80 pt-4 flex flex-col h-auto rounded-2xl overflow-hidden">
         <div className="text-xl font-extrabold mb-3 px-4 ">Trends for you</div>
         <div className=" mt pb-3 -3 px-4 hover:bg-zinc-700">
           <div className=" flex text-sm items-center">
@@ -83,7 +83,7 @@ export default function Trend() {
           </div>
         </div>
         <div className=" text-lg  py-4 p-4 hover:bg-zinc-700 ">Show more</div>
-      </div>
+      </div> */}
       <div className="  mt-3 px-4  border border-twitterBorder text-white w-80  flex flex-col h-auto rounded-2xl overflow-hidden ">
         <div className="text-xl my-3 font-bold mb-3  ">Who to follow</div>
         {usersToFollow.map((user, index) => (
@@ -128,14 +128,18 @@ export default function Trend() {
             </button>
           </div>
         ))}
-
-        <div className=" text-twitterBlue hover:bg-zinc-700 my-3">
-          Show more
-        </div>
+        <Link href={"/follow"}>
+          <div className=" text-twitterBlue  my-3">
+            Show more
+          </div>
+        </Link>
       </div>
       <div className="px-4 py-6 text-twitterLightGray flex-wrap  w-80 text-xs">
         {termsAndPolicy.map((term, index) => (
-          <div className="inline-flex my-1" key={index}>
+          <div
+            className="inline-flex my-1"
+            key={index}
+          >
             <span className="mr-3">{term}</span>
             {index != termsAndPolicy.length - 1 && (
               <span className="mr-3">|</span>

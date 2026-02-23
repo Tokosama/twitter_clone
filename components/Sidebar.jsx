@@ -11,6 +11,7 @@ import {
   Mail,
   Search,
   UserRound,
+  UserRoundPlus,
 } from "lucide-react";
 import PostForm from "./PostForm";
 
@@ -52,7 +53,7 @@ export default function Sidebar() {
       name: "Follow",
       href: "/follow",
       icon: (
-        <UserRound
+        <UserRoundPlus
           size={26}
           color="white"
         />
@@ -100,7 +101,7 @@ export default function Sidebar() {
           href="/"
           className="mt-2 pl-6"
         >
-          <span className="h-11 inline-flex items-center hover:bg-zinc-700 w-auto rounded-full">
+          <span className="h-11 inline-flex items-center ml-[-3px] px-2 hover:bg-zinc-700 w-auto rounded-full">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 16 16"
