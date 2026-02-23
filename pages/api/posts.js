@@ -6,64 +6,40 @@ import Like from "@/models/Like";
 import Follower from "@/models/Follower";
 
 export default async function handler(req, res) {
-  await initMongoose();
-  const session = await getServerSession(req, res, authOptions);
-  //Get request
-  if (req.method === "GET") {
-    const { id } = req.query;
-    if (id) {
-      const post = await Post.findById(id).populate("author").populate({path:'parent',populate:'author'});
-      res.json({ post });
-    } else {
-      const parent = req.query.parent || null;
-      const author = req.query.author;
-      let searchFilter;
-      if (!author && !parent) {
-        const myFollows = await Follower.find({
-          source: session?.user.id,
-        }).exec();
-        const idsOfPeopleIFollow = myFollows.map((f) => f.destination);
-        searchFilter = { author: [...idsOfPeopleIFollow, session?.user.id] };
+  try {
+    await initMongoose();
+    const session = await getServerSession(req, res, authOptions);
+
+    if (!session) return res.status(401).json({ error: "Not authenticated" });
+
+    if (req.method === "GET") {
+      // ton code GET...
+    } else if (req.method === "POST") {
+      const { text, parent, images } = req.body;
+      if (!text && (!images || images.length === 0)) {
+        return res.status(400).json({ error: "Text or images required" });
       }
-      if (author) {
-        searchFilter = { author };
-      }
+
+      const post = await Post.create({
+        author: session.user.id,
+        text,
+        parent,
+        images,
+      });
+
       if (parent) {
-        searchFilter = { parent };
+        const parentPost = await Post.findById(parent);
+        if (parentPost) {
+          parentPost.commentsCount = await Post.countDocuments({ parent });
+          await parentPost.save();
+        }
       }
-      const posts = await Post.find(searchFilter)
-        .populate("author")
-        .populate({path:'parent',
-          populate:'author'
-        })
-        .sort({ createdAt: -1 })
-        .limit(20)
-        .exec();
-      const postsLikedByMe = await Like.find({
-        author: session?.user.id,
-        post: posts.map((p) => p._id),
-      });
-      const idsLikedByMe = postsLikedByMe.map((like) => like.post);
-      res.json({
-        posts,
-        idsLikedByMe,
-      });
+      res.json(post);
+    } else {
+      res.status(405).json({ error: "Method not allowed" });
     }
-  }
-// Post request
-  if (req.method === "POST") {
-    const { text, parent,images } = req.body;
-    const post = await Post.create({
-      author: session.user.id,
-      text,
-      parent,
-      images,
-    });
-    if (parent) {
-      const parentPost = await Post.findById(parent);
-      parentPost.commentsCount = await Post.countDocuments({ parent });
-      await parentPost.save();
-    }
-    res.json(post);
+  } catch (err) {
+    console.error("API /posts error:", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 }
