@@ -7,7 +7,7 @@ import Follower from "@/models/Follower";
 
 export default async function handler(req, res) {
   try {
-    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")
+    console.log("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$");
     await initMongoose();
     const session = await getServerSession(req, res, authOptions);
 
@@ -15,44 +15,58 @@ export default async function handler(req, res) {
 
     if (req.method === "GET") {
       const { id } = req.query;
+      const toggleFollow = req.query.toggleFollow === "true";
+      const parent = req.query.parent || null;
+      const author = req.query.author;
+
       if (id) {
         const post = await Post.findById(id)
           .populate("author")
           .populate({ path: "parent", populate: "author" });
-        res.json({ post });
-      } else {
-        const parent = req.query.parent || null;
-        const author = req.query.author;
-        let searchFilter;
-        if (!author && !parent) {
-          const myFollows = await Follower.find({
-            source: session?.user.id,
-          }).exec();
-          const idsOfPeopleIFollow = myFollows.map((f) => f.destination);
-          searchFilter = { author: [...idsOfPeopleIFollow, session?.user.id] };
-        }
-        if (author) {
-          searchFilter = { author };
-        }
-        if (parent) {
-          searchFilter = { parent };
-        }
-        const posts = await Post.find(searchFilter)
-          .populate("author")
-          .populate({ path: "parent", populate: "author" })
-          .sort({ createdAt: -1 })
-          .limit(20)
-          .exec();
-        const postsLikedByMe = await Like.find({
-          author: session?.user.id,
-          post: posts.map((p) => p._id),
-        });
-        const idsLikedByMe = postsLikedByMe.map((like) => like.post);
-        res.json({
-          posts,
-          idsLikedByMe,
-        });
+
+        return res.json({ post });
       }
+
+      let searchFilter = {};
+
+      if (author) {
+        searchFilter.author = author;
+      }
+
+      if (parent) {
+        searchFilter.parent = parent;
+      }
+
+      if (!author && !parent && toggleFollow) {
+        const myFollows = await Follower.find({
+          source: session?.user.id,
+        }).lean();
+
+        const idsOfPeopleIFollow = myFollows.map((f) => f.destination);
+
+        searchFilter.author = {
+          $in: [...idsOfPeopleIFollow, session?.user.id],
+        };
+      }
+
+      const posts = await Post.find(searchFilter)
+        .populate("author")
+        .populate({ path: "parent", populate: "author" })
+        .sort({ createdAt: -1 })
+        .limit(20)
+        .lean();
+
+      const postsLikedByMe = await Like.find({
+        author: session?.user.id,
+        post: { $in: posts.map((p) => p._id) },
+      }).lean();
+
+      const idsLikedByMe = postsLikedByMe.map((like) => like.post);
+
+      res.json({
+        posts,
+        idsLikedByMe,
+      });
     }
     // Post request
     else if (req.method === "POST") {

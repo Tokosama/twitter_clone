@@ -93,15 +93,15 @@ export default function BottomNavBar() {
           onClick={() => {
             setToggleFollow(false);
           }}
-          className=" flex justify-center hover:bg-twitterBorder   items-center flex-col font-semibold"
+          className=" flex justify-center rounded-xl  active:bg-white/10  items-center flex-col font-semibold"
         >
           <Link
             key={link.name}
             href={link.href}
-            className="block my-2 py-1 pr-[12-px]"
+            className="block  w-full my-2 py-1 pr-[12-px]"
           >
             <span className={`h-9  mt-3 `}>
-              <span className=" inline-flex justify-center ml-2 items-center hover:bg-zinc-700 w-auto  rounded-full  xl:rounded-3xl">
+              <span className=" inline-flex justify-center  items-center w-auto  rounded-full  xl:rounded-3xl">
                 {link.icon}
               </span>
             </span>

@@ -19,13 +19,19 @@ export default function Home() {
   const [idsLikedByMe, setIdsLikedByMe] = useState([]);
   const [postLoading, setPostLoading] = useState(false);
   const [postButtonLoading, setPostButtonLoading] = useState(false);
-  const [toggleFollow, setToggleFollow] = useState(false);
+  const [toggleFollow, setToggleFollow] = useState(true);
   const router = useRouter();
   function fetcHomePosts() {
-    axios.get("/api/posts").then((response) => {
-      setPosts(response.data.posts);
-      setIdsLikedByMe(response.data.idsLikedByMe);
-    });
+    axios
+      .get("/api/posts", {
+        params: {
+          toggleFollow,
+        },
+      })
+      .then((response) => {
+        setPosts(response.data.posts);
+        setIdsLikedByMe(response.data.idsLikedByMe);
+      });
   }
 
   async function logout() {
@@ -45,7 +51,7 @@ export default function Home() {
     return () => {
       window.removeEventListener("postCreated", reload);
     };
-  }, []);
+  }, [toggleFollow]);
 
   if (userInfoStatus === "loading") {
     return (
@@ -70,7 +76,7 @@ export default function Home() {
       </div>
     );
   }
-
+  console.log(posts);
   return (
     <div>
       <Layout>
@@ -81,7 +87,7 @@ export default function Home() {
               onClick={() => {
                 setToggleFollow(false);
               }}
-              className="h-14 flex justify-center hover:bg-twitterBorder   items-center flex-col font-semibold"
+              className="h-14 flex justify-center  xs:hover:bg-twitterBorder   items-center flex-col font-semibold"
             >
               <span
                 className={`h-9  mt-3 ${!toggleFollow ? " border-b-[4px] border-twitterBlue " : "text-twitterLightGray "}`}
@@ -93,7 +99,7 @@ export default function Home() {
               onClick={() => {
                 setToggleFollow(true);
               }}
-              className="h-14 flex justify-center   hover:bg-twitterBorder  items-center flex-col font-semibold"
+              className="h-14 flex justify-center    xs:hover:bg-twitterBorder  items-center flex-col font-semibold"
             >
               <span
                 className={`h-9 mt-3 ${toggleFollow ? " border-b-[4px]  border-twitterBlue  " : " text-twitterLightGray"}`}
@@ -114,28 +120,26 @@ export default function Home() {
             {postButtonLoading ? (
               <Spinner />
             ) : (
-              posts.length > 0 &&
+              posts?.length > 0 &&
               posts.map((post, index) => (
-                
-                  <div
-                    key={index}
-                    className=" border-t border-twitterBorder p-5"
-                  >
-                    {post.parent && (
-                      <div>
-                        <PostContent
-                          {...post.parent}
-                          showLine={!!post.parent}
-                        />
-                      </div>
-                    )}
-                    <PostContent
-                      {...post}
-                      likedByMe={idsLikedByMe.includes(post._id)}
-                      showLine={false}
-                    />
-                  </div>
-                
+                <div
+                  key={index}
+                  className=" border-t border-twitterBorder p-5"
+                >
+                  {post.parent && (
+                    <div>
+                      <PostContent
+                        {...post.parent}
+                        showLine={!!post.parent}
+                      />
+                    </div>
+                  )}
+                  <PostContent
+                    {...post}
+                    likedByMe={idsLikedByMe.includes(post._id)}
+                    showLine={false}
+                  />
+                </div>
               ))
             )}
           </div>

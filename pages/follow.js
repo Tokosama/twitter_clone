@@ -6,12 +6,14 @@ import Link from "next/link";
 import UserHoverCard from "@/components/UserHoverCard";
 import { Clipboard } from "lucide-react";
 import { ClipLoader } from "react-spinners";
+import axios from "axios";
 
 export default function follow() {
   const [usersToFollow, setUsersToFollow] = useState([]);
   const [toggleCreator, setToggleCreator] = useState(false);
   const [usersCreator, setUsersCreator] = useState([]);
   const [loadingFollow, setLoadingFollow] = useState(false);
+  const [isFollowing, setIsFollowing] = useState(false);
 
   useEffect(() => {
     async function fetchUsers() {
@@ -25,7 +27,16 @@ export default function follow() {
 
     fetchUsers();
   }, []);
+  function toggleFollow(id) {
+    setIsFollowing((prev) => !prev);
 
+    axios.post("/api/followers", {
+      destination: id,
+    });
+    setUsersToFollow((prev) => prev.filter((u) => u._id !== id));
+
+    
+  }
   useEffect(() => {
     //setLoadingFollow(true);
 
@@ -130,7 +141,10 @@ export default function follow() {
           </div>
         ) : (
           (!toggleCreator ? usersToFollow : usersCreator).map((user, index) => (
-            <div className="" key={index}>
+            <div
+              className=""
+              key={index}
+            >
               <div className="flex text-base py-3 cursor-pointer">
                 <div className=" flex h-full justify-start align-top items-start">
                   <UserHoverCard user={user}>

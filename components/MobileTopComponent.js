@@ -2,7 +2,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import Avatar from "./Avatar";
 import { ClipLoader } from "react-spinners";
-import { House, LogOut, Plus, UserRound } from "lucide-react";
+import { House, LogOut, Plus, UserRound, UserRoundPlus } from "lucide-react";
 import { signOut } from "next-auth/react";
 
 export default function MobileTopComponent({ profileInfo }) {
@@ -46,7 +46,7 @@ export default function MobileTopComponent({ profileInfo }) {
       name: "Follow",
       href: "/follow",
       icon: (
-        <UserRound
+        <UserRoundPlus
           size={26}
           color="white"
         />
@@ -116,7 +116,7 @@ export default function MobileTopComponent({ profileInfo }) {
             onClick={() => setOpen(true)}
             className="cursor-pointer"
           >
-            <Avatar />
+            <Avatar src={profileInfo.image} />
           </div>
           <span className="absolute left-1/2 -translate-x-1/2 h-11 inline-flex items-center hover:bg-zinc-700 w-auto rounded-full">
             <svg
@@ -200,7 +200,10 @@ export default function MobileTopComponent({ profileInfo }) {
               </span>
             </Link>
           ))}
-          <button className="block my-2 py-1 pr-[12-px]" onClick={logout}>
+          <button
+            className="block my-2 py-1 pr-[12-px]"
+            onClick={logout}
+          >
             <span className="h-11 xl:mr-3 inline-flex justify-center  items-center hover:bg-zinc-700 w-auto p-1 rounded-full  xl:rounded-3xl">
               <LogOut size={26} />
               <span className=" text-xl font-semibold ml-5">Log out</span>

@@ -17,7 +17,7 @@ export default function PostContent({
   showLine = false, // 👈 ajoute ceci
 }) {
   function showImages() {
-    if (!images.length) {
+    if (!images?.length) {
       return "";
     }
     return (
