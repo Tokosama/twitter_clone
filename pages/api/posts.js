@@ -37,7 +37,8 @@ export default async function handler(req, res) {
         searchFilter.parent = parent;
       }
 
-      if (!author && !parent && toggleFollow) {
+      console.log(toggleFollow)
+      if (toggleFollow) {
         const myFollows = await Follower.find({
           source: session?.user.id,
         }).lean();

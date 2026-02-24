@@ -9,6 +9,8 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { BadgeCheck, CalendarDays } from "lucide-react";
 import getFollowStats from "@/lib/utils";
+import { ClipLoader } from "react-spinners";
+import Spinner from "@/components/Spinner";
 export default function UserPage() {
   const router = useRouter();
   const { username } = router.query;
@@ -25,8 +27,8 @@ export default function UserPage() {
     followers: 0,
     following: 0,
   });
-  const [togglePost, setTogglePost] = useState(false);
-
+  const [toggleFollow, setToggleFollow] = useState(false);
+  const [loadingPost, setLoadingPost] = useState(false);
   useEffect(() => {
     if (!username) {
       return;
@@ -43,11 +45,22 @@ export default function UserPage() {
     if (!profileInfo?._id) {
       return;
     }
-    axios.get("/api/posts?author=" + profileInfo._id).then((response) => {
-      setPosts(response.data.posts);
-      setPostsLikedByMe(response.data.idsLikedByMe);
-    });
-  }, [profileInfo]);
+    async function getPosts() {
+      setLoadingPost(true);
+
+     await  axios
+        .get("/api/posts?author=" + profileInfo._id, {
+          params: { toggleFollow },
+        })
+        .then((response) => {
+          setPosts(response.data.posts);
+          setPostsLikedByMe(response.data.idsLikedByMe);
+        });
+      setLoadingPost(false);
+
+    }
+    getPosts();
+  }, [profileInfo, toggleFollow]);
 
   useEffect(() => {
     async function loadFollowStats() {
@@ -84,7 +97,7 @@ export default function UserPage() {
     setEditMode(false);
   }
 
-  function toggleFollow() {
+  function toggleFollowFunction() {
     setIsFollowing((prev) => !prev);
     axios.post("/api/followers", {
       destination: profileInfo?._id,
@@ -95,7 +108,7 @@ export default function UserPage() {
     axios.patch("/api/verifyUser");
   }
   const isMyProfile = profileInfo?._id === userInfo?._id;
-
+  console.log(loadingPost);
   return (
     <Layout>
       <div>
@@ -127,7 +140,7 @@ export default function UserPage() {
               <div className="p-2">
                 {!isMyProfile && (
                   <button
-                    onClick={toggleFollow}
+                    onClick={toggleFollowFunction}
                     className={
                       (isFollowing
                         ? "bg-twitterWhite text-black"
@@ -276,41 +289,51 @@ export default function UserPage() {
           <div className="sticky top-0 left-0 w-full grid grid-cols-2 text-center border-b border-twitterBorder bg-transparent backdrop-blur-xl z-50">
             <div
               onClick={() => {
-                setTogglePost(false);
+                setToggleFollow(false);
               }}
               className="h-14 flex justify-center hover:bg-twitterBorder   items-center flex-col font-semibold"
             >
               <span
-                className={`h-9  mt-3 ${!togglePost ? " border-b-[4px] border-twitterBlue " : "text-twitterLightGray "}`}
+                className={`h-9  mt-3 ${!toggleFollow ? " border-b-[4px] border-twitterBlue " : "text-twitterLightGray "}`}
               >
                 For you{" "}
               </span>
             </div>
             <div
               onClick={() => {
-                setTogglePost(true);
+                setToggleFollow(true);
               }}
               className="h-14 flex justify-center   hover:bg-twitterBorder  items-center flex-col font-semibold"
             >
               <span
-                className={`h-9 mt-3 ${togglePost ? " border-b-[4px]  border-twitterBlue  " : " text-twitterLightGray"}`}
+                className={`h-9 mt-3 ${toggleFollow ? " border-b-[4px]  border-twitterBlue  " : " text-twitterLightGray"}`}
               >
                 Following
               </span>
             </div>
           </div>
-          {posts?.length > 0 &&
-            posts.map((post) => (
+          {loadingPost ? (
+            <div className="flex justify-center py-12">
+              <div>
+                <ClipLoader
+                  color="white"
+                  size={26}
+                />
+              </div>{" "}
+            </div>
+          ) : (
+            posts?.map((post) => (
               <div
                 className="p-5 border-t border-twitterBorder"
-                key={post}
+                key={post.id}
               >
                 <PostContent
                   {...post}
                   likedByMe={postsLikedByMe.includes(post._id)}
                 />
               </div>
-            ))}
+            ))
+          )}
         </div>
       </div>
     </Layout>
