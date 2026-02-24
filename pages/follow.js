@@ -95,12 +95,12 @@ export default function follow() {
             <div
               onClick={async () => {
                 setLoadingFollow(true);
+                setToggleCreator(false);
                 await new Promise((r) => setTimeout(r, 500)); // 👈 laisse React render
 
-                setToggleCreator(false);
                 setLoadingFollow(false);
               }}
-              className="h-14 flex justify-center hover:bg-twitterBorder   items-center flex-col font-semibold"
+              className="h-14 flex justify-center xs:hover:bg-twitterBorder   items-center flex-col font-semibold"
             >
               <span
                 className={`h-9  mt-3 ${!toggleCreator ? " border-b-[4px] border-twitterBlue " : "text-twitterLightGray "}`}
@@ -111,12 +111,12 @@ export default function follow() {
             <div
               onClick={async () => {
                 setLoadingFollow(true);
+                setToggleCreator(true);
                 await new Promise((r) => setTimeout(r, 500)); // 👈 laisse React render
 
-                setToggleCreator(true);
                 setLoadingFollow(false);
               }}
-              className="h-14 flex justify-center   hover:bg-twitterBorder  items-center flex-col font-semibold"
+              className="h-14 flex justify-center   xs:hover:bg-twitterBorder  items-center flex-col font-semibold"
             >
               <span
                 className={`h-9 mt-3 ${toggleCreator ? " border-b-[4px]  border-twitterBlue  " : " text-twitterLightGray"}`}

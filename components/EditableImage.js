@@ -1,3 +1,4 @@
+import { UserRound } from "lucide-react";
 import { useState } from "react";
 import { FileDrop } from "react-file-drop"; //permet de gerer le drag and drop
 import { PulseLoader } from "react-spinners"; // pour gerer les animation de chargement
@@ -60,11 +61,11 @@ if(!editable) extraClasses ="";
         
           <div className={"flex items-center overflow-hidden " +className}>
             {" "}
-            {src && ( <img
+            {src? ( <img
               className="w-full"
               src={src}
               alt=""
-            />  )}
+            />  ): (<UserRound />)}
           </div>
       
       </div>

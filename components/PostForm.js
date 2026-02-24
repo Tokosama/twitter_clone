@@ -1,6 +1,6 @@
 import useUserInfo from "@/hooks/useUserInfo";
 import axios from "axios";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import Avatar from "./Avatar";
 
 import Upload from "./Upload";
@@ -21,7 +21,18 @@ export default function PostForm({
   const [text, setText] = useState("");
   const [images, setImages] = useState([]);
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const pickerRef = useRef(null);
 
+  useEffect(() => {
+    function handleClickOutside(e) {
+      if (pickerRef.current && !pickerRef.current.contains(e.target)) {
+        setShowEmojiPicker(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   if (status === "loading") {
     return "";
   }
@@ -142,7 +153,10 @@ export default function PostForm({
             </button>
 
             {showEmojiPicker && (
-              <div className="absolute z-50">
+              <div
+                ref={pickerRef}
+                className="absolute z-50"
+              >
                 <Picker
                   data={emojiData}
                   onEmojiSelect={addEmoji}
